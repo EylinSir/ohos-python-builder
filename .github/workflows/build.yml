@@ -11,10 +11,10 @@ jobs:
       - name: Checkout build scripts
         uses: actions/checkout@v4
 
-      - name: Install Python 3.14
+      - name: Install Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: '3.11'
 
       # === Download previous deps artifact (if exists) ===
       - name: Download previous deps
@@ -181,13 +181,13 @@ jobs:
           echo ""
           echo "=== Deps check ==="
           ls -la /opt/deps/lib/*.so* 2>/dev/null || echo "No deps libs"
-          ls -la /opt/python-3.14.6-ohos-arm64/bin/python3* 2>/dev/null || echo "No python binary"
+          ls -la /opt/python-3.11.9-ohos-arm64/bin/python3* 2>/dev/null || echo "No python binary"
 
       # === Package if Python binary exists ===
       - name: Package
         if: always()
         run: |
-          if [ ! -f /opt/python-3.14.6-ohos-arm64/bin/python3.14 ]; then
+          if [ ! -f /opt/python-3.11.9-ohos-arm64/bin/python3.11 ]; then
             echo "Python not built, skipping package"
             exit 0
           fi
@@ -208,5 +208,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: python-ohos-shared
-          path: python-3.14.6-ohos-arm64.tar.gz
+          path: python-3.11.9-ohos-arm64.tar.gz
           retention-days: 30

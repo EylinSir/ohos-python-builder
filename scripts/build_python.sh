@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
-# Build CPython 3.14.6 for OHOS ARM64
+# Build CPython 3.11.9 for OHOS ARM64
 set -ex
 
 DEPS_DIR=/opt/deps
 WORKDIR=/home/runner/work/ohos-python-builder/ohos-python-builder
-PREFIX=/opt/python-3.14.6-ohos-arm64
+PREFIX=/opt/python-3.11.9-ohos-arm64
 BUILD_PYTHON=${BUILD_PYTHON:-$(which python3)}
 
-if [ -f $PREFIX/bin/python3.14 ]; then
+if [ -f $PREFIX/bin/python3.11 ]; then
     echo "=== Python already built, skipping ==="
     exit 0
 fi
 
 cd $WORKDIR/deps 2>/dev/null || { mkdir -p $WORKDIR/deps && cd $WORKDIR/deps; }
 
-if [ ! -d Python-3.14.6 ]; then
-    curl -fLO https://www.python.org/ftp/python/3.14.6/Python-3.14.6.tgz
-    tar -zxf Python-3.14.6.tgz
-    rm -rf Python-3.14.6.tgz
+if [ ! -d Python-3.11.9 ]; then
+    curl -fLO https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz
+    tar -zxf Python-3.11.9.tgz
+    rm -rf Python-3.11.9.tgz
 fi
 
-cd Python-3.14.6
+cd Python-3.11.9
 
 # Force aarch64-linux-musl platform triplet (reuse musl pip packages)
 sed -i 's|PLATFORM_TRIPLET="${PLATFORM_TRIPLET#PLATFORM_TRIPLET=}"|PLATFORM_TRIPLET="aarch64-linux-musl"|g' configure
