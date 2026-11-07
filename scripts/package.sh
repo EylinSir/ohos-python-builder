@@ -3,7 +3,7 @@
 set -ex
 
 PREFIX=/opt/python-3.11.9-ohos-arm64
-WORKDIR=/home/runner/work/ohos-python-builder/ohos-python-builder
+WORKDIR=${GITHUB_WORKSPACE:-/home/runner/work/ohos-python-builder/ohos-python-builder}
 SIGN_TOOL=/opt/ohos-sdk/linux/toolchains/lib/binary-sign-tool
 
 cd $PREFIX

@@ -80,29 +80,19 @@ jobs:
           echo "RANLIB=/bin/llvm-ranlib" >> $GITHUB_ENV
           echo "LD=/bin/ld.lld" >> $GITHUB_ENV
           echo "STRIP=/bin/strip" >> $GITHUB_ENV
-          echo "CHOST=aarch64-linux-gnu" >> $GITHUB_ENV
+          echo "CHOST=aarch64-linux-ohos" >> $GITHUB_ENV
           echo "BUILD_PYTHON=$(which python3)" >> $GITHUB_ENV
 
-      # === PRIORITY: Python first (fail fast) ===
-      - name: Build Python
-        id: python
-        run: sudo -E bash scripts/build_python.sh
-
-      # === Already succeeded - will auto-skip from artifact ===
-      - name: Build sqlite
-        id: sqlite
+      # === Build dependencies FIRST (Python needs headers at configure time) ===
+      - name: Build zlib
+        id: zlib
         continue-on-error: true
-        run: sudo -E bash scripts/build_sqlite.sh
+        run: sudo -E bash scripts/build_zlib.sh
 
       - name: Build OpenSSL
         id: openssl
         continue-on-error: true
         run: sudo -E bash scripts/build_openssl.sh
-
-      - name: Build zlib
-        id: zlib
-        continue-on-error: true
-        run: sudo -E bash scripts/build_zlib.sh
 
       - name: Build libffi
         id: libffi
@@ -143,6 +133,16 @@ jobs:
         id: gdbm
         continue-on-error: true
         run: sudo -E bash scripts/build_gdbm.sh
+
+      - name: Build sqlite
+        id: sqlite
+        continue-on-error: true
+        run: sudo -E bash scripts/build_sqlite.sh
+
+      # === Build Python AFTER all deps are ready ===
+      - name: Build Python
+        id: python
+        run: sudo -E bash scripts/build_python.sh
 
       # === Upload deps artifact (always, even if some failed) ===
       - name: Pack deps for artifact
